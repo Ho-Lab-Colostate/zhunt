@@ -112,6 +112,10 @@ tests-main: image | docker
 	docker run $(DOCKER_OPTS) $(IMAGE_DOCKER) \
 		$(PYTHON) --version
 
+tests-bin: image | docker
+	docker run $(DOCKER_OPTS) $(IMAGE_DOCKER) \
+		time zhunt 24 6 24 $(IMAGE_PYTEST_DIR)/data/example_input0.fasta
+
 pytest: pytest-docker
 
 pytest-docker: image-dev | docker
