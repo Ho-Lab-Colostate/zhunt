@@ -3,7 +3,7 @@ Z-HUNT-2 computer program, Sept.19, 1990
 */
 
 /*
-serialized i/o to allow to run against large datasets 
+serialized i/o to allow to run against large datasets
 Updated i/o permissions to match posix. campt 1/10/2000
 */
 
@@ -287,7 +287,7 @@ int user_regret( void )
   char c;
   do
     {
-      gets( tempstr );
+      fgets( tempstr, 10, stdin );
       c = tempstr[0];
     }  while( c == 0 );
   return (c == '@') ? 1 : 0;
@@ -302,7 +302,7 @@ FILE *open_file( int mode, char *filename, char *typestr )
   static char *iostr[] = { "output", "input" };
   static char *rwstr[] = { "w",     "r" };
   char  *fullfile;
-  
+
   FILE *file;
   file = NULL;
   fullfile = (char *) malloc(sizeof(char) * ( strlen(filename) + strlen(typestr) + 1) );
@@ -313,7 +313,7 @@ FILE *open_file( int mode, char *filename, char *typestr )
 	strcat(fullfile, typestr);
 	}
 printf("opening %s\n", fullfile);
-   
+
   file = fopen( fullfile, rwstr[mode] );
   free(fullfile);
   return file;
@@ -402,7 +402,7 @@ while( j=0, fgets( tempstr, 128, file ) != NULL )
 #endif
 	}
 #ifdef USE_MMAP
-	close(OUTPUT);	
+	close(OUTPUT);
 	sequencefile = open ("/usr/local/apache/htdocs/zhunt/temp", O_RDWR, NULL);
 	free(sequence);
 	sequence = (char *) mmap(0,length, PROT_READ | PROT_WRITE,MAP_SHARED,sequencefile,0);
@@ -634,9 +634,9 @@ void calculate_zscore( double a, int maxdinucleotides, int min, int max, char *f
 #endif
       probability = assign_probability( bestdl );
 #ifndef PROB_ONLY
-      fprintf( file, " %7.3lf %7.3lf %le %s\n", bestdl, slope, probability, bestantisyn ); 
+      fprintf( file, " %7.3lf %7.3lf %le %s\n", bestdl, slope, probability, bestantisyn );
 #else
-      fprintf( file, " %7.3lf %le\n", bestdl, probability ); 
+      fprintf( file, " %7.3lf %le\n", bestdl, probability );
 #endif
     }
   time( &endtime );
@@ -873,9 +873,3 @@ void show_probability( unsigned seqlength, float *dl, float *slope, float *proba
         }
  fclose( file );
 }
-
-
-
-
-
-
