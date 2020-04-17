@@ -1,5 +1,5 @@
-SRC_DIR = /Users/Team_HoLab/Desktop/RSC/Documents/Coding/Zhunt
-BIN_DIR = /usr/local/bin
+SRC_DIR ?= /Users/Team_HoLab/Desktop/RSC/Documents/Coding/Zhunt
+BIN_DIR ?= /usr/local/bin
 SHELL ?= bash
 GCC ?= gcc
 SCRIPTS ?= ./scripts
