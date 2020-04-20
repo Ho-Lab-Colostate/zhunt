@@ -12,9 +12,10 @@ GITREF_FULL=$(shell git rev-parse HEAD)
 ####################################
 # Compile C
 ####################################
+GCC_OPTS ?= -lm
 
 $(BIN_DIR)/zhunt: $(SRC_DIR)/zhunt3.c
-	$(GCC) -o $@ $<
+	$(GCC) $(GCC_OPTS) -o $@ $<
 
 all: $(BIN_DIR)/zhunt
 
@@ -114,7 +115,7 @@ tests-main: image | docker
 
 tests-bin: image | docker
 	docker run $(DOCKER_OPTS) $(IMAGE_DOCKER) \
-		time zhunt 24 6 24 $(IMAGE_PYTEST_DIR)/data/example_input0.fasta
+		zhunt 12 6 12 $(IMAGE_PYTEST_DIR)/data/example_input0.fasta
 
 pytest: pytest-docker
 
