@@ -1,6 +1,6 @@
-PYTHON ?= python3
-SRC_DIR ?= ./src
-BIN_DIR ?= ./bin
+#run with make -f Makefile
+SRC_DIR ?= /Users/Team_HoLab/Desktop/RSC/Documents/Coding/Zhunt
+BIN_DIR ?= /usr/local/bin
 SHELL ?= bash
 GCC ?= gcc
 SCRIPTS ?= ./scripts
