@@ -77,7 +77,7 @@ class MyFirstGUI:
 
             zhunt()
             send_email()
-            print("Everything complete!\n")
+            print("Your run is complete, please close Submit window.\n")
         self.submit_button=Button(master, text="Submit", command=submit)
         self.submit_button.pack()
 
