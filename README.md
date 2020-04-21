@@ -18,7 +18,7 @@ make all
 
 ## Python Code
 
-Within scripts, zhunt.py is compatible with Python2.7. Future development will make it Python3 compatable. 
+Within [scripts](https://github.com/Ho-Lab-Colostate/zhunt/tree/master/scripts), zhunt.py is compatible with Python2.7. Future development will make it Python3 compatable. 
 After zhunt compilation as described above, create a directory and place the python script with the target .fasta file. 
 
 ```python zhunt.py```
