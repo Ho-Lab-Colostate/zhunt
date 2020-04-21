@@ -16,6 +16,15 @@ Compile using `gcc` compiler:
 make all
 ```
 
+## Python Code
+
+Within scripts, zhunt.py is compatible with Python2.7. Future development will make it Python3 compatable. 
+After zhunt compilation as described above, create a directory and place the python script with the target .fasta file. 
+
+```python zhunt.py```
+
+A GUI will pop-up for you to select your desired .fasta file as well as a section for your email address (future developmet). Select submit. The run will output a file <yourfilename.fasta.Z-score> that can be read in a text editor or imported into Excel.  
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
