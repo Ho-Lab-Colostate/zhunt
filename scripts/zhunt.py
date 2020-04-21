@@ -8,7 +8,7 @@ import smtplib
 from string import Template #
 
 # Call upon the compiled zhunt program from the ./bin folder
-MY_ADDRESS = 'ryansczarny@gmail.com' #need to setup an email account for this
+MY_ADDRESS = '#####@gmail.com' #need to setup an email account for this
 PASSWORD = '####'
     
 
