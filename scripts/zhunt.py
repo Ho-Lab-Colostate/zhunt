@@ -1,89 +1,109 @@
+#flask testing
+from flask import Flask, render_template, request, redirect, url_for, send_file, send_from_directory
 from Tkinter import * #Needed for the GUI portion
 import Tkinter as tk
 import os #Needed for the GUI portion 
 import shlex, subprocess #Needed to call on the C program
 from email.mime.multipart import MIMEMultipart #Needed to email user
 from email.mime.text import MIMEText #Needed to email user
+from werkzeug.utils import secure_filename
 import smtplib
-from string import Template #
+from string import Template
 
-# Call upon the compiled zhunt program from the ./bin folder
-MY_ADDRESS = '#####@gmail.com' #need to setup an email account for this
+MY_ADDRESS = 'example@gmail.com' #need to setup an email account for this
 PASSWORD = '####'
-    
+output_file=""
+UPLOAD_FOLDER = '/Users/Team_HoLab/Desktop/RSC/Documents/Coding/Zhunt/uploads'
+ALLOWED_EXTENSIONS = {'txt', 'fasta'}
 
-class MyFirstGUI:
-    def __init__(self,master):
-        self.master=master
-        master.title("DNA Translation")
-        
-        self.label=Label(master, text="DNA Translator")
-        self.label.pack()
-        self.label1=Label(master, text="Enter the file name (including .txt) for the sequence:")
-        self.label1.pack()
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-        
-        self.entry1=Entry(master)
-        self.entry1.pack()
-        
-        self.label2=Label(master,text="Enter email address:")
-        self.label2.pack()
-        
-        self.entry2=Entry(master)
-        self.entry2.pack()
-        
-        #dna=Entry(master)
-        #dna.pack()
-        #dna.delete(0, END)
-        #new_dna=dna
-        
-        def submit():
-            def zhunt():
-                print("zhunt 12 6 12 " + self.entry1.get())
-            
-            def read_template():
-                """
-                Returns a Template object comprising the contents of the 
-                file specified by filename.
-                """
-                
-                template_file_content = "Your Zhunt run is complete"
-                return template_file_content
-            
-            def send_email():
-                message_template = read_template()
-            
-                # set up the SMTP server
-                s = smtplib.SMTP(host='smtp.gmail.com', port=587)
-                s.starttls()
-                s.login(MY_ADDRESS, PASSWORD)
-            
-                msg = MIMEMultipart()       # create a message
-           
-                # setup the parameters of the message
-                msg['From']=MY_ADDRESS
-                msg['To']=self.entry2.get()
-                msg['Subject']="Zhunt Run Complete"
-                    
-                # add in the message body
-                msg.attach(MIMEText(message_template, 'plain'))
-                message = 'Subject: {}\n\n{}'.format("Zhunt Run Complete", message_template)    
-                # send the message via the server set up earlier.
-                s.sendmail(MY_ADDRESS,self.entry2.get(),message)
-                del msg
-                    
-                # Terminate the SMTP session and close the connection
-                s.quit()
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-            zhunt()
-            send_email()
-            print("Your run is complete, please close Submit window.\n")
-        self.submit_button=Button(master, text="Submit", command=submit)
-        self.submit_button.pack()
+@app.route('/', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            
+            #f=open("./uploads/"+filename)
+            email=request.form.get("user_email")
+            command_line = "zhunt 12 6 12 ./uploads/" + filename
+        
+            args = shlex.split(command_line)
+            p = subprocess.Popen(args)
+            tmp=subprocess.call("./a.out")
+            
+            # message_template = "Your Zhunt run is complete"
+            #         
+            # # set up the SMTP server
+            # s = smtplib.SMTP(host='smtp.gmail.com', port=587)
+            # s.starttls()
+            # s.login(MY_ADDRESS, PASSWORD)
+            # 
+            # msg = MIMEMultipart()       # create a message
+            # 
+            # # setup the parameters of the message
+            # msg['From']=MY_ADDRESS
+            # msg['To']=request.form.get("user_email")
+            # msg['Subject']="Zhunt Run Complete"
+            #     
+            # # add in the message body
+            # msg.attach(MIMEText(message_template, 'plain'))
+            # message = 'Subject: {}\n\n{}'.format("Zhunt Run Complete", message_template)    
+            # # send the message via the server set up earlier.
+            # s.sendmail(MY_ADDRESS,request.form.get("user_email"),message)                    
+            # del msg
+            #     
+            # # Terminate the SMTP session and close the connection
+            # s.quit()
+            
+            output_file="/uploads/"+filename+".Z-SCORE"
 
-    
-    
-root=Tk()
-root.geometry("400x200")
-my_gui=MyFirstGUI(root)
-root.mainloop()
+            return render_template("downloads.html",output_file=output_file)
+    return '''
+    <!doctype html>
+    <title>Zhunt</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        body{
+            padding:15px;
+        }
+    </style>
+    <h1>Zhunt</h1>
+    <body>
+    <p>
+            <br>Welcome to Zhunt.<br>
+            <br>
+            Please upload the .fasta file you would like to analyze and your email address to get an email after run completion.<br>
+    </p>
+    <form method=post enctype=multipart/form-data>
+      FASTA File: <input type=file name=file></br>
+      Email: <input type="text" name="user_email" /></br></br>
+      <input type=submit value=Submit>
+    </form>
+    </body>
+    '''
+
+@app.route('/return-file/', methods=["POST"])
+def downloadFile ():
+    #For windows you need to use drive name [ex: F:/Example.pdf]
+    filename = request.form['output_file']
+    print(filename)
+
+    path = "/Users/Team_HoLab/Desktop/RSC/Documents/Coding/Zhunt" + filename
+    return send_file(path, as_attachment=True)
