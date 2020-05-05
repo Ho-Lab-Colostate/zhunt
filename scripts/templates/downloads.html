@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Success!
+
+{% endblock %}
+
+{% block body %}
+    <h1>Success!</h1>
+
+    You have successfully submitted your Zhunt job. Please download the results at the below link.</br>
+    <style>
+        #user_input{
+            display: none;
+        }
+    </style>
+    <form action="{{ url_for('downloadFile') }}" method="post">
+        <input id="user_input" type=text name=output_file value={{output_file}}>
+        </br></br><input type=submit value=Download>
+    </form>
+
+{% endblock %}
