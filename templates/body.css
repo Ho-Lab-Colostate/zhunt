@@ -1,0 +1,23 @@
+h2 {
+  padding: 10px;
+}
+
+p, paragraph1 {
+  color: black;
+  text-align: left;
+  padding: 10px;
+  background-color: lightgray;
+  border: groove;
+}
+
+paragraph1 {
+  font: Arial;
+}
+
+@media only screen and (max-width: 600px) {
+  body {
+    background-color: lightgray;
+  }
+}
+
+/*# sourceMappingURL=body.css.map */

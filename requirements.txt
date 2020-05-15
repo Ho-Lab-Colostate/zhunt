@@ -1,0 +1,5 @@
+Flask
+numpy
+plotly
+subprocess.run
+argparse

@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <style>
+        p{
+            padding:15px;
+        }
+        body form{
+            padding: 15px;
+        }
+        h1{
+            padding: 15px;
+        }
+    </style>
+        <h1>Welcome to Z-hunt!</h1>
+        <p>Please upload the .fasta or .txt file you would like to analyze and your email address to get an email after run completion (if not immediate).</p>
+        <form method=post enctype=multipart/form-data>
+          FASTA File: <input type=file name=file required><br></br>
+          Email: <input type="email" name="user_email" required/><br><br>
+          <input type=submit value=Submit>
+        </form>
+{% endblock %}
+

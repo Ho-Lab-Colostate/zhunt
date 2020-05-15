@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <a class="navbar-brand" href="/">Z-hunt</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('research') }}">Research</a>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
+              </li>
+            </ul></br>
+
+
+{% endblock %}
+
+{% block body %}
+    <style>
+        p{
+            padding:15px;
+            width: 80%;
+        }
+        ul{
+            width: 80%;
+        }
+    </style>
+    
+        <p>Below is a list of the research done related to this project
+        <ul style="list-style: none;">
+            <li><a href="https://www.embopress.org/doi/abs/10.1002/j.1460-2075.1986.tb04558.x">A computer aided thermodynamic approach for predicting the formation of Z‐DNA in naturally occurring sequences</a> <br>1986, <strong>P.S. Ho, M.J. Ellison, G.J. Quigley, A. Rich</strong></li></br>
+            <li><a href="https://www.ncbi.nlm.nih.gov/pubmed/17925442">Phylogenomic analysis of the emergence of GC-rich transcription elements</a> <br>2007, <strong>Khuu P, Sandor M, DeYoung J, Ho PS.</strong></li></br>
+            <li><a href="https://www.ncbi.nlm.nih.gov/pubmed/18848994">Thermogenomics: thermodynamic-based approaches to genomic analyses of DNA structure</a> <br>2009, <strong>Ho PS.</strong></li></br>
+            <li><a href="https://www.ncbi.nlm.nih.gov/pubmed/1601856">Mapping Z-DNA in the human genome. Computer-aided mapping reveals a nonrandom distribution of potential Z-DNA-forming sequences in human genes</a> <br>1992, <strong>Schroth GP, Chou PJ, Ho PS.</strong></li>
+        </ul>
+        </p>
+{% endblock %}
+

@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <a class="navbar-brand" href="/">Z-hunt</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('research') }}">Research</a>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
+              </li>
+            </ul></br>
+
+
+{% endblock %}
+
+{% block body %}
+    <style>
+        p{
+            padding:15px;
+            width: 80%;
+        }
+    </style>
+    
+        <p>Have questions? Please feel reach out to us.
+        </br></br><strong>PI</strong>: Dr. P Shing Ho <a href="mailto:shing.ho@colostate.edu">Email</a>
+        </br><strong>Student</strong>: Ryan S Czarny, PhD Candidate <a href="mailto:ryan.czarny@colostate.edu">Email</a>
+        </p>
+        <p>
+            Zhunt was written by Ping-jung Chou, under the instruction of Pui S. Ho, according to the
+            paper "A computer aided thermodynamic approach for predicting the formation of
+            Z-DNA in naturally occurring sequences",
+            The EMBO Journal, Vol.5, No.10, pp2737-2744, 1986
+            With 0.22 kcal/mol/dinuc for mCG (Zacharias et al, Biochemistry, 1988, 2970)
+        </p>
+        <p>
+            The Python wrapped and HTML content was written by Ryan S Czarny, under the
+            instruction of Pui S. Ho in 2020. 
+        </p>
+{% endblock %}
+
