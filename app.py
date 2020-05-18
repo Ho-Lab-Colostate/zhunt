@@ -76,7 +76,7 @@ def see_data ():
     filename = request.form['output_file']
     df_file="."+filename
     df=np.loadtxt(df_file, skiprows=1, usecols=[2],dtype=str)
-    fig = go.Figure(data=go.Bar(y=df))
+    fig = go.Figure(data=go.Bar(y=df, marker_color="#1359c2"))
     fig.update_layout(xaxis=dict(title="Sequence"),yaxis=dict(title="Z-SCORE"))
     run_filename= filename[8:] + "_figure.html"
     fig.write_html('./templates'+run_filename)
