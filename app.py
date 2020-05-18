@@ -58,8 +58,9 @@ def upload_file():
             user_info.write(email + "\n")
             user_info.close()
 
-            if os.path.exists(os.getcwd()+'/templates/figure.html'):
-                os.remove(os.getcwd()+'/templates/figure.html')
+            for document in os.listdir('./templates/'):
+                if document.endswith('figure.html'):
+                    os.remove('./templates/' + document)
             
             return render_template("downloads.html", output_file=output_file)
     return render_template("index.html")
@@ -67,18 +68,19 @@ def upload_file():
 @app.route('/return-file/', methods=['get','post'])
 def downloadFile ():
     filename = request.form['download_output_file']
-    path = os.getcwd() + filename
+    path = "." + filename
     return send_file(path, as_attachment=True)
 
 @app.route('/see_graph/', methods=['get','post'])
 def see_data ():
     filename = request.form['output_file']
-    df_file= os.getcwd() + filename
+    df_file="."+filename
     df=np.loadtxt(df_file, skiprows=1, usecols=[2],dtype=str)
     fig = go.Figure(data=go.Bar(y=df))
     fig.update_layout(xaxis=dict(title="Sequence"),yaxis=dict(title="Z-SCORE"))
-    fig.write_html(os.getcwd()+'/templates/figure.html')
-    return render_template('figure.html')
+    run_filename= filename[8:] + "_figure.html"
+    fig.write_html('./templates'+run_filename)
+    return render_template(run_filename)
 
 @app.route('/research/',methods=['get','post'])
 def research():
