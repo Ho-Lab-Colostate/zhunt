@@ -141,20 +141,22 @@ double delta_linking_slope( double dl )
 
 
 
+/* Updated on 200526 to include "methyl" base = m by adding the energies to each base index as well as the final 5 for the methyl grouping*/
 
                                         /* Delta BZ Energy of Dinucleotide */
-double dbzed[4][16] = {
+double dbzed[4][25] = {
 /* AS-AS */
-{ 4.40, 6.20, 3.40, 5.20, 2.50, 4.40, 1.40, 3.30, 3.30, 5.20, 2.40, 4.20, 1.40, 3.40, 0.66, 2.40 },
+/* AA    AT    AG    AC    AM    TA    TT    TG    TC    TM    GA    GT    GG    GC    GM    CA    CT    CG    CC    CM    MA    MT     MG    MC    MM */
+{ 4.40, 6.20, 3.40, 5.20, 3.00, 2.50, 4.40, 1.40, 3.30, 1.90, 3.30, 5.20, 2.40, 4.20, 1.49, 1.40, 3.40, 0.66, 2.40, 0.93, 0.80, 1.90, -0.71, 0.93, 0.90 },
 /* SA-SA */
-{ 4.40, 2.50, 3.30, 1.40, 6.20, 4.40, 5.20, 3.40, 3.40, 1.40, 2.40, 0.66, 5.20, 3.30, 4.20, 2.40 },
+{ 4.40, 2.50, 3.30, 1.40, 0.80, 6.20, 4.40, 5.20, 3.40, 1.90, 3.40, 1.40, 2.40, 0.66, -0.71, 5.20, 3.30, 4.20, 2.40, 2.73, 3.00, 1.90, 1.49, 2.73, 0.90 },
 /* AS-SA */
-{ 6.20, 6.20, 5.20, 5.20, 6.20, 6.20, 5.20, 5.20, 5.20, 5.20, 4.00, 4.00, 5.20, 5.20, 4.00, 4.00 },
+{ 6.20, 6.20, 5.20, 5.20, 4.60, 6.20, 6.20, 5.20, 5.20, 4.60, 5.20, 5.20, 4.00, 4.00, 2.53, 5.20, 5.20, 4.00, 4.00, 2.53, 4.60, 4.60, 2.53, 2.53, 1.93 },
 /* SA-AS */
-{ 6.20, 6.20, 5.20, 5.20, 6.20, 6.20, 5.20, 5.20, 5.20, 5.20, 4.00, 4.00, 5.20, 5.20, 4.00, 4.00 }
+{ 6.20, 6.20, 5.20, 5.20, 4.60, 6.20, 6.20, 5.20, 5.20, 4.60, 5.20, 5.20, 4.00, 4.00, 2.53, 5.20, 5.20, 4.00, 4.00, 2.53, 4.60, 4.60, 2.53, 2.53, 1.93 }
                       };
 
-double expdbzed[4][16];                 /* exp(-dbzed/rt) */
+double expdbzed[4][25];                 /* exp(-dbzed/rt) */
 int    *bzindex;                        /* dinucleotides */
 
 
@@ -168,7 +170,7 @@ unsigned input_sequence( FILE *file, int nucleotides, int showfile );
 double   assign_probability( double dl );
 
 
-
+/* Updated on 200526 to include "methyl" base = m*/
 void assign_bzenergy_index( int nucleotides, char seq[] )
 {
   int  i, j, idx;
@@ -186,36 +188,45 @@ void assign_bzenergy_index( int nucleotides, char seq[] )
                          case 'a' : idx = 0;  break;
                          case 't' : idx = 1;  break;
                          case 'g' : idx = 2;  break;
-                         case 'c' : idx = 3;
+                         case 'c' : idx = 3;  break;
+                         case 'm' : idx = 4;
                        }  break;
           case 't' : switch( c2 )
                        {
-                         case 'a' : idx =  4;  break;
-                         case 't' : idx =  5;  break;
-                         case 'g' : idx =  6;  break;
-                         case 'c' : idx =  7;
+                         case 'a' : idx = 5;  break;
+                         case 't' : idx = 6;  break;
+                         case 'g' : idx = 7;  break;
+                         case 'c' : idx = 8;  break;
+                         case 'm' : idx = 9;
                        }  break;
           case 'g' : switch( c2 )
                        {
-                         case 'a' : idx =  8;  break;
-                         case 't' : idx =  9;  break;
-                         case 'g' : idx = 10;  break;
-                         case 'c' : idx = 11;
+                         case 'a' : idx = 10;  break;
+                         case 't' : idx = 11;  break;
+                         case 'g' : idx = 12;  break;
+                         case 'c' : idx = 13;  break;
+                         case 'm' : idx = 14;
                        }  break;
           case 'c' : switch( c2 )
                        {
-                         case 'a' : idx = 12;  break;
-                         case 't' : idx = 13;  break;
-                         case 'g' : idx = 14;  break;
-                         case 'c' : idx = 15;
+                         case 'a' : idx = 15;  break;
+                         case 't' : idx = 16;  break;
+                         case 'g' : idx = 17;  break;
+                         case 'c' : idx = 18;  break;
+                         case 'm' : idx = 19;
+                       }
+          case 'm' : switch( c2 )
+                       {
+                         case 'a' : idx = 20;  break;
+                         case 't' : idx = 21;  break;
+                         case 'g' : idx = 22;  break;
+                         case 'c' : idx = 23;  break;
+                         case 'm' : idx = 24;
                        }
         }
       bzindex[j++] = idx;
     }  while( i < nucleotides );
 }
-
-
-
 
 
 double *bzenergy, *best_bzenergy;       /* dinucleotides */
@@ -338,7 +349,7 @@ while( j=0, fgets( tempstr, 128, file ) != NULL )
 	{
     	while( (c=tempstr[j++]) != 0 )
 		{
-      		if( c == 'a'  ||  c == 't'  ||  c == 'g'  ||  c == 'c' || c == 'A'  ||  c == 'T'  ||  c == 'G'  ||  c == 'C' )
+      		if( c == 'a'  ||  c == 't'  ||  c == 'g'  ||  c == 'c' || c == 'm' || c == 'A'  ||  c == 'T'  ||  c == 'G'  ||  c == 'C' || c == 'M')
 			{
         		length ++;
 			}
@@ -363,24 +374,28 @@ while( j=0, fgets( tempstr, 128, file ) != NULL )
 	{
     	while( (c=tempstr[j++]) != 0 )
 		{
-      		if( c == 'a'  ||  c == 't'  ||  c == 'g'  ||  c == 'c' || c == 'A'  ||  c == 'T'  ||  c == 'G'  ||  c == 'C' )
+      		if( c == 'a'  ||  c == 't'  ||  c == 'g'  ||  c == 'c' || c == 'm' || c == 'A'  ||  c == 'T'  ||  c == 'G'  ||  c == 'C' || c == 'M' )
         		{
           		if( c == 'A')
-				{
-				c = 'a';
-				}
-          		if( c == 'T')
-				{
-				c = 't';
-				}
-          		if( c == 'G')
-				{
-				c = 'g';
-				};
-          		if( c == 'C')
-				{
-				c = 'c';
-				}
+            {
+            c = 'a';
+            }
+              if( c == 'T')
+            {
+            c = 't';
+            }
+              if( c == 'G')
+            {
+            c = 'g';
+            } /* deleted a ; from this line because I don't believe it is needed or might be changing things that it */
+              if( c == 'C')
+            {
+            c = 'c';
+            }
+              if( c == 'M')
+            {
+            c = 'm';
+            };
 #ifndef USE_MMAP
           		sequence[i++] = c;
 #else
@@ -505,7 +520,7 @@ int main( int argc, char *argv[])
     }
 
   for( i=0; i<4; i++ )
-    for( j=0; j<16; j++ )
+    for( j=0; j<25; j++ )
       expdbzed[i][j] = exp( -dbzed[i][j] / rt );
 
   logcoef = (double *) calloc( dinucleotides, sizeof(double) );
