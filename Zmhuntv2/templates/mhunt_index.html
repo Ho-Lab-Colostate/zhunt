@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <style>
+        p{
+            padding:15px;
+        }
+        body form{
+            padding: 15px;
+        }
+        h1{
+            padding: 15px;
+        }
+    </style>
+        <h1>Welcome to Z-mhunt!</h1>
+        <p>You are on the page for Z-mhunt, Z-hunt for sequences containing methylation sites. Before your run, please make sure to designate your methylated cytosines are 'M' within your .txt or .fasta file.</p>
+        <p>Note: as of May 27, 2020, this script only runs based on 100% methylation. Development for partial methylation (% reads methylated) is in the works.</p>
+        <form method=post enctype=multipart/form-data>
+          FASTA File: <input type=file name=file required><br></br>
+          Email: <input type="email" name="methyl_user_email" required/><br><br>
+          <input type=submit value=Submit>
+        </form>
+{% endblock %}
+

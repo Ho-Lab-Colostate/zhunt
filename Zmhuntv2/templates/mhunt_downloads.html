@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+
+
+{% block body %}
+    <style>
+        h1{
+            padding: 15px;
+        }
+        form{
+            padding: 15px;
+        }
+    </style>
+    <h1>Success!</h1>
+
+    <style>
+        #user_input{
+            display: none;
+        }
+    </style>
+
+    <form action="{{ url_for('methyl_downloadFile') }}" method="post">
+        You have successfully submitted your Z-mhunt job. Please download the raw data at the below link.</br>
+        <input id="user_input" type=text name=download_output_file value={{output_file}}>
+        </br></br><input type=submit value=Download>
+    </form>
+
+    <form action="{{ url_for('methyl_see_data') }}" method="post">
+        If you would like to view a graph of your data, please select the link below.</br>
+        <input id="user_input" type=text name=output_file value={{output_file}}>
+        </br></br><input type=submit value="View Graph">
+    </form>
+
+{% endblock %}

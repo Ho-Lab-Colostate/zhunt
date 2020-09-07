@@ -1,0 +1,187 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <a class="navbar-brand" href="/">Z-hunt</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('research') }}">Research</a>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
+              </li>
+            </ul></br>
+
+
+{% endblock %}
+
+{% block body %}
+    <style>
+        p{
+            padding:15px;
+            width: 80%;
+        }
+        ul{
+            width: 80%;
+        }
+        #myDIV{
+            display: none;
+        }
+        #myDIV2{
+            display: none;
+        }
+       button {
+          transition-duration: 0.4s;
+          background-color: #555555;
+          color: white;
+          text-align: center;
+          border: 2px solid #555555;
+          border-radius: 2px;
+          padding: 5px 12px;
+        }
+      
+       button:hover {
+          background-color: white;
+          color: #555555;
+        }
+    </style>
+    
+        <p>Looking for some code that can help with your Z-score analysis? Look no further!
+        Shown here is a python script that can be run on your raw sequence and Z-score files. Simply make sure that the script and raw data are in the same directory and run it. 
+</br>
+<button onclick="myFunction()">Show Python Script</button>
+<div id="myDIV">
+<xmp>
+    """
+    Written by Ryan S Czarny (rczarny@colostate.edu) - 200519
+    
+    This code will read through your Z-score that is in .csv format.
+    
+    Requirements:
+        - Your Sequence and Z-score files must be within the directory  you are running this
+    
+    Update 200527 to read raw sequence and Z-score files and output sequence and Z-score csv as well
+    as output csv (that analyzes the bases and sums the z-score throughout the sequence)
+    """
+    
+    import pandas as pd
+    import numpy as np
+    import os
+    import csv
+    
+    # updated on 200527 to have everything work 
+    for documents in os.listdir("."):
+        if documents.endswith(".fasta" or ".txt"):
+            seq_col=[]
+            working_doc=open(documents)
+            for lines in working_doc:
+                for nt in lines:
+                    seq_col.append(nt+",")
+            seq_col=np.vstack((seq_col))
+            #print(seq_col)
+        elif "Z-SCORE" in documents:
+            zscore=open(documents)
+            df=[]
+            for lines in zscore:
+                if "/" in lines:
+                    lines=""
+                else:
+                    lines=lines.replace("    "," ")
+                    lines=lines.replace("   "," ")
+                    lines=lines.replace("  "," ")
+                    lines=lines.replace(" ",",")
+                    lines=lines.replace("\n","")
+                    lines=lines[1:]
+                    
+                    df.append(lines)
+            df=np.asarray(df)
+            df = np.array([l.split(',') for l in df])
+            df=np.vstack((df[:,2]))
+    
+            if "Z-SCORE.txt" in documents:
+                documents=documents.rstrip(".Z-SCORE.txt")
+            else:
+                documents=documents.rstrip(".Z-SCORE")
+    
+            all_data=np.hstack((seq_col,df))
+    
+            seq_dict={}
+    
+            df = all_data
+            
+            nts, zscore = map(list, zip(*df))
+    
+            
+            for i in range(len(nts)):
+                if nts[i] not in seq_dict:
+                    seq_dict[nts[i]]=[float(zscore[i]),1]
+                else:
+                    seq_dict[nts[i]][0] += float(zscore[i])
+                    seq_dict[nts[i]][1] += 1
+            
+            output_file=open(documents+"_output.csv","w+")
+            
+            writer=csv.writer(output_file)
+            writer.writerow(["nts","z-score sum","count"])
+            for key,value in seq_dict.items():
+                writer.writerow([key.rstrip(","),value[0],value[1]])
+            
+    
+            np.savetxt(documents+"_sequence&zscore.csv",np.array(all_data),fmt="%s")
+    </xmp>
+</div>
+<script>
+    function myFunction() {
+        var x = document.getElementById("myDIV");
+        if (x.style.display === "block") {
+          x.style.display = "none";
+        } else {
+          x.style.display = "block";
+        }
+      } 
+</script>
+</p><p>Additional analysis can be done with this R-script using the output file from above.
+</br>
+<button onclick="myFunction2()">Show R Script</button>
+
+<div id="myDIV2">
+        <xmp>
+    library(ggplot2)
+    df <- read.csv("yeast_chr3_6_output.csv")
+    nts <- df$nts
+    zscore <- df$zscore
+    count <- df$count
+    
+    nts=factor(nts)
+    count=as.numeric(count)
+    
+    jpeg("nts#.jpeg", width = 350, height = "350")
+    ggplot(df, aes(x = nts)) + 
+    geom_col(aes(y = zscore), size = 1, color = "darkblue", fill = "white") +   
+    geom_point(aes(y = 100*count), size = 1.5, color="red")+                        
+    scale_y_continuous(sec.axis=sec_axis(~./100,name="Counts"),name="Z-score")
+        </xmp>
+</div>
+<script>
+    function myFunction2() {
+        var x = document.getElementById("myDIV2");
+        if (x.style.display === "block") {
+          x.style.display = "none";
+        } else {
+          x.style.display = "block";
+        }
+      } 
+</script>
+        </p>
+
+{% endblock %}
+

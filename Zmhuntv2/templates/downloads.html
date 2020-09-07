@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+
+
+{% block body %}
+    <style>
+        h1{
+            padding: 15px;
+        }
+        form{
+            padding: 15px;
+        }
+    </style>
+    <h1>Success!</h1>
+
+    <style>
+        #user_input{
+            display: none;
+        }
+    </style>
+<!--button to loaded the raw data that comes out of Z-hunt -->
+    <form action="{{ url_for('downloadFile') }}" method="post">
+        You have successfully submitted your Z-hunt job. Please download the raw data at the below link.</br>
+        <input id="user_input" type=text name=download_output_file value={{output_file}}>
+        </br></br><input type=submit value=Download>
+    </form>
+<!--button to download the files that the pre-made R script runs-->
+    <form action="{{ url_for('downloadRFiles') }}" method="post">
+        You have successfully submitted your Z-hunt job. Please download the raw data at the below link.</br>
+        <input id="user_input" type=text name=download_output_file value={{output_file}}>
+        </br></br><input type=submit value="Download Graphs">
+    </form>
+<!--button to view the raw results in-site with Plotly-->
+    <form action="{{ url_for('see_data') }}" method="post">
+        If you would like to view a graph of your data, please select the link below.</br>
+        <input id="user_input" type=text name=output_file value={{output_file}}>
+        </br></br><input type=submit value="View Graph">
+    </form>
+
+{% endblock %}
