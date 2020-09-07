@@ -16,8 +16,8 @@ RUN apt-get update && \
                                                python3.6 \
                                                python3-pip \
                                                python3-setuptools \
-                                               python3-dev
-
+                                               python3-dev \
+                                               gcc
 # -----------------------------------------------------------------------------
 
 # Install all requirements.txt
@@ -30,11 +30,11 @@ RUN mkdir -p $ZHUNT_HOME/bin\
 
 ENV FLASK_APP app.py
 ENV FLASK_RUN_HOST 0.0.0.0
-RUN apk add --no-cache gcc musl-dev linux-headers
+#RUN apk add --no-cache gcc musl-dev linux-headers
 
 # python dependency installs
 COPY $REQUIREMENTS $ZHUNT_HOME/$REQUIREMENTS
-RUN pip install -r $ZHUNT_HOME/$REQUIREMENTS
+RUN python3 -m pip install -r $ZHUNT_HOME/$REQUIREMENTS
 
 # R dependency installs
 COPY $RREQUIREMENTS $ZHUNT_HOME/$RREQUIREMENTS
@@ -49,8 +49,8 @@ COPY test $ZHUNT_HOME/test
 COPY src $ZHUNT_HOME/src
 
 # compile zhunt with gcc
-RUN gcc $GCC_OPTS -o $ZHUNT_HOME/bin/zhunt $ZHUNT_HOME/src/zhunt3.c
-RUN gcc $GCC_OPTS -o $ZHUNT_HOME/bin/mhunt $ZHUNT_HOME/src/mhunt.c
+RUN gcc -o $ZHUNT_HOME/bin/zhunt $ZHUNT_HOME/src/zhunt3.c -lm
+RUN gcc -o $ZHUNT_HOME/bin/mhunt $ZHUNT_HOME/src/mhunt.c -lm
 
 WORKDIR $ZHUNT_HOME
 
